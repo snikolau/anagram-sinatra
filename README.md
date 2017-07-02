@@ -1,7 +1,7 @@
 # Anagram web service
 
 Sinatra based web service application which returns anagrams for requested words.
-By default it uses dictionary file from (https://github.com/dwyl/english-words) repository.
+By default, it uses dictionary file from https://github.com/dwyl/english-words repository.
 
 ## Local installation
 1. Clone this repository
@@ -33,11 +33,15 @@ should return:
 ## Further improvements
 
 This is a basic implementation which has some downsides:
- - Dictionary file is loaded in memory and is transformed every time server is starting.
- - It is not possible to extend dictionary, without editing text file and restarting server.
+ - Dictionary configuration is defined directly within Sinatra application.
+ - Dictionary file is loaded in memory and is transformed every time server is starting, which significantly increases
+ starting time. The problem is visible especially when hosted on Heroku free tire, where the application is switching to
+ idle mode every 30 minutes.
+ - It is not possible to extend dictionary, without editing text file and restarting the server.
  
 Possible solutions
- - One of the solutions would be writing separate rake / bash task to processing text file and
-  storing intermediate data. This would reduce app start time, as it would only load preprocessed data, 
-  but would not solve problem with extensibility.
- - More complex but scalable solution might be using in memory data store as Redis.   
+ - Create separate configuration module / class responsible for storing / initialisation of system wide available data.
+ - One of the solutions would be creating separate rake / bash task to process text file and store intermediate
+ preprocessed data in a separate file. This would reduce app start time, as it would only load preprocessed data without 
+ processing step, but would not solve a problem with extensibility.
+ - More complex but scalable solution might be using in-memory data store as Redis.   
